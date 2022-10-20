@@ -37,11 +37,14 @@ case class Request(
    * @return
    */
   def data: Map[String, List[String]] = {
-    val params: List[String] = this.body.getOrElse("").split("&").toList
+    val params: List[String] = this.body.getOrElse("").split("&").toList.tail
     if (params.nonEmpty) {
       params.map(x => {
         val parts = x.split("=")
-        parts(0) -> parts(1)
+        if (parts.size == 2)
+          parts(0) -> parts(1)
+        else
+          parts(0) -> ""
       }).groupMap(_._1)(_._2)
     } else {
       Map()

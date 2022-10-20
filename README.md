@@ -7,6 +7,10 @@ response/request model. The benefits of this approach are the following:
 * zero dependency built-in development web server to test lambda locally
 * lambda can be deployed in front of ALB or API Gateway without any change to source code
 
+## Coordinates
+
+https://repo1.maven.org/maven2/io/github/markosski/lambdaweb4s_2.13/
+
 ## Usage
 
 Add `lambdaweb4s` dependency to your build system and create class that extends `LambdaWebHandler`
