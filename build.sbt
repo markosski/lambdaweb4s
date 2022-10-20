@@ -24,6 +24,7 @@ lazy val artifactorySettings = Seq(
   publishTo := sonatypePublishToBundle.value,
   sonatypeCredentialHost := "s01.oss.sonatype.org",
   sonatypeRepository := "https://s01.oss.sonatype.org/service/local",
+  sonatypeProfileName := "io.github.markosski",
   sonatypeProjectHosting := Some(GitHubHosting("markosski", "lambdaweb4s", "marcin.kossakowski@gmail.com")),
 )
 

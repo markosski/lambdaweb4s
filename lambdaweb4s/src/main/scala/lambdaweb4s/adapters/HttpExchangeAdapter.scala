@@ -12,10 +12,9 @@ class HttpExchangeAdapter(req: HttpExchange) extends RequestResponseAdapter[Unit
 		Try(Request(
 			Path.from(req.getRequestURI.getPath),
 			getMethod(req),
-			getHeaders(req),
 			getParams(req),
-			getBody(req),
-			None
+			getHeaders(req),
+			getBody(req)
 			)).toEither
 	}
 
@@ -45,7 +44,10 @@ class HttpExchangeAdapter(req: HttpExchange) extends RequestResponseAdapter[Unit
 		if (params.nonEmpty) {
 			params.map(x => {
 				val parts = x.split("=")
-				parts(0) -> parts(1)
+				if (parts.size == 2)
+					parts(0) -> parts(1)
+				else
+					parts(0) -> ""
 			}).groupMap(_._1)(_._2)
 		} else {
 			Map()
@@ -62,6 +64,9 @@ class HttpExchangeAdapter(req: HttpExchange) extends RequestResponseAdapter[Unit
 			is.read(bytes)
 			is.close()
 			Some(new String(bytes, Charset.forName("UTF-8")))
-		} else None
+		} else {
+			is.close()
+			None
+		}
 	}
 }
