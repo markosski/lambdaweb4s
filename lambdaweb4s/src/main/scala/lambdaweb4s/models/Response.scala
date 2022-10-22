@@ -27,6 +27,10 @@ object Response {
     Response(code, htmlOrText.getBytes(), Map(Headers.CONTENT_TYPE -> List(ContentType.TEXT_HTML)))
   }
 
+  def json(code: Int, htmlOrText: String): Response = {
+    Response(code, htmlOrText.getBytes(), Map(Headers.CONTENT_TYPE -> List(ContentType.APPLICATION_JSON)))
+  }
+
   def ok(text: String): Response = {
     Response.text(HttpCodes.OK, text)
   }
