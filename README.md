@@ -13,7 +13,8 @@ https://repo1.maven.org/maven2/io/github/markosski/lambdaweb4s_2.13/
 
 ## Usage
 
-Add `lambdaweb4s` dependency to your build system and create class that extends `LambdaWebHandler`
+Add `lambdaweb4s` dependency to your build system and create class that extends `LambdaWebHandler`. 
+When deploying to AWS, configure your lambda function to be backed either by Application Load Balancer or API Gateway in passthrough mode. When executed locally, built-in web server will start up that you can use to test your application endpoints locally.
 
 
 ```scala
@@ -42,6 +43,10 @@ object Handler extends App {
   server.listen(8080)
 }
 ```
+
+## Run Example with SBT
+
+`sbt "project example; run"`
 
 ## Run Locally
 
