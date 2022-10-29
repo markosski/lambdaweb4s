@@ -2,14 +2,14 @@ package lambdaweb4s
 
 import com.amazonaws.services.lambda.runtime.{Context, RequestStreamHandler}
 import lambdaweb4s.adapters.{ALBAdapter, APIGatewayAdapter}
-import lambdaweb4s.models.Request
-import lambdaweb4s.models.Response
+import lambdaweb4s.models.{HttpCodes, Request, Response}
 import lambdaweb4s.models.HttpCodes._
 import org.slf4j.LoggerFactory
 
 import java.io.{BufferedReader, InputStream, InputStreamReader, OutputStream}
 import java.nio.charset.Charset
 import scala.jdk.CollectionConverters._
+import scala.util.{Failure, Success, Try}
 
 trait LambdaWebHandler extends RequestStreamHandler {
   protected val logger = LoggerFactory.getLogger(this.getClass)
@@ -22,7 +22,13 @@ trait LambdaWebHandler extends RequestStreamHandler {
   private[this] def getAllRoutes = routes orElse defaultRoutes
 
   def route(request: Request): Response = {
-    getAllRoutes.apply(request)
+    Try(getAllRoutes.apply(request)) match {
+      case Success(value) => value
+      case Failure(exception) => {
+        logger.error(s"Error when executing route for request: $request", exception)
+        Response(HttpCodes.INTERNAL_ERROR, Array(), Map())
+      }
+    }
   }
 
   def handleRequest(inputStream: InputStream, outputStream: OutputStream, context: Context): Unit = {
